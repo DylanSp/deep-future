@@ -20,6 +20,26 @@ module.exports = {
   plugins: ["react-refresh"],
   rules: {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        fixStyle: "separate-type-imports",
+      },
+    ],
+    // necessary to avoid errors with @typescript-eslint/no-restricted-imports, per https://typescript-eslint.io/rules/no-restricted-imports/
+    "no-restricted-imports": "off",
+    "@typescript-eslint/no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "react-redux",
+            importNames: ["useSelector", "useStore", "useDispatch"],
+            message: "Please use pre-typed versions from `src/app/hooks.ts` instead.",
+          },
+        ],
+      },
+    ],
     "prettier/prettier": "warn",
   },
   settings: {
