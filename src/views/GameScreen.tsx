@@ -6,6 +6,11 @@ export function GameScreen() {
   return (
     <div
       style={{
+        // minWidth: "90%",
+        // minHeight: "90%",
+        minWidth: "90vw",
+        minHeight: "90vh",
+
         display: "grid",
         // TODO - probably specify row/column sizes, aim to keep the third row (showing the player's hand) at ~1/3 of the screen
         // gridTemplateRows: "1fr 1fr 1fr",
