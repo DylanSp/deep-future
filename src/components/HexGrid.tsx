@@ -1,10 +1,13 @@
 import type { ReactElement } from "react";
+import type { Sector } from "../game/commonTypes";
 
-type SectorDigit = "1" | "2" | "3" | "4" | "5" | "6";
-type SectorNumber = `${SectorDigit}${SectorDigit}` | "blackhole";
+// type SectorDigit = "1" | "2" | "3" | "4" | "5" | "6";
+// type SectorLabel = `${SectorDigit}${SectorDigit}` | "blackhole";
+
+type SectorLabel = Sector | "blackhole";
 
 type HexProps = {
-  sectorNumber: SectorNumber; // the number on the rulebook's map; used for gameplay, not a coordinate system
+  sectorNumber: SectorLabel; // the number on the rulebook's map; used for gameplay, not a coordinate system
 };
 
 // hexes are oriented with the pointy top up, compared to the rulebook's flat top orientation; it makes the CSS easier
@@ -15,7 +18,7 @@ type HexProps = {
 // the game's sector numbers don't follow any coordinate system that I can understand
 // this also encodes the shape of the map - each sub-array's length is the number of hexes in that row
 // sector numbers are taken from the rulebook PDF, reading the map sideways (in the PDF's default orientation)
-const SECTOR_NUMBERS: Array<Array<SectorNumber>> = [
+const SECTOR_NUMBERS: Array<Array<SectorLabel>> = [
   ["21", "22", "23", "31"], // 4 hexes
   ["13", "24", "25", "34", "32"], // 5 hexes
   ["12", "15", "26", "36", "35", "33"], // 6 hexes
