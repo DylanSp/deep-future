@@ -1,10 +1,10 @@
 import "./App.css";
-import { HexGrid } from "./components/HexGrid";
+import { GameScreen } from "./views/GameScreen";
 
 function App() {
   return (
     <>
-      <HexGrid />
+      <GameScreen />
     </>
   );
 }
