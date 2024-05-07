@@ -1,20 +1,48 @@
-import type { VariantOf } from "variant";
-import { fields, variantModule } from "variant";
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
+import type { Immutable } from "immer";
 
-type EmptyObject = Record<string, never>;
-
-// TODO - better, more concise name
-const CardTypeSpecificData = variantModule({
-  world: fields<{ name: string; sector: Sector; era: Era }>(), // TODO -  advancements
-  tech: fields<{ era: Era; name?: string }>(), // TODO - suits, advancements
-  civilization: fields<{ name: string; sector: Sector; era: Era; homeworldName: string; techs: Array<string> }>(), // TODO - card effects
-  blank: fields<EmptyObject>(),
-});
-type CardTypeSpecificData = VariantOf<typeof CardTypeSpecificData>;
-
-export type Card = {
+type CardCommonFields = Immutable<{
   suit: Suit;
   rank: Rank;
-  cardTypeSpecificData: CardTypeSpecificData;
-};
+}>;
+
+type WorldCard = Immutable<
+  CardCommonFields & {
+    kind: "world";
+
+    name: string;
+    sector: Sector;
+    era: Era;
+    // TODO -  advancements
+  }
+>;
+
+type TechCard = Immutable<
+  CardCommonFields & {
+    kind: "tech";
+
+    era: Era;
+    name?: string;
+    // TODO - suits, advancements
+  }
+>;
+
+type CivilizationCard = Immutable<
+  CardCommonFields & {
+    kind: "civ";
+
+    name: string;
+    sector: Sector;
+    era: Era;
+    homeworldName: string;
+    techs: Array<string>;
+  }
+>;
+
+type BlankCard = Immutable<
+  CardCommonFields & {
+    kind: "blank";
+  }
+>;
+
+export type Card = Immutable<WorldCard | TechCard | CivilizationCard | BlankCard>;
