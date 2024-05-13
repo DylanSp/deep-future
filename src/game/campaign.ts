@@ -1,7 +1,7 @@
 import type { Card, WorldCard } from "./card";
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
 import type { Deck } from "./deck";
-import { createBlankCard, generateRandomSector } from "./deck";
+import { createBlankCard, discardCard, generateRandomSector } from "./deck";
 import type { Game } from "./game";
 
 type WonderType = "territory" | "population" | "culture" | "might" | "stability" | "xeno";
@@ -70,8 +70,8 @@ export function newCampaign(): Campaign {
   };
 
   for (let i = 0; i < 12; i++) {
-    const [newDeck, blankHomeworld] = createBlankCard(deck);
-    const [deck1, homeworldSector] = generateRandomSector(newDeck);
+    const blankHomeworld = createBlankCard(deck);
+    const homeworldSector = generateRandomSector(deck);
 
     const unnamedHomeworld: WorldCard = {
       kind: "world",
@@ -87,7 +87,7 @@ export function newCampaign(): Campaign {
     // TODO - get a name for each world from user input
     // (rulebook says to deal these worlds evenly to players - we're assuming a solo game)
 
-    deck1.discardPile.push(unnamedHomeworld);
+    discardCard(deck, unnamedHomeworld);
   }
 
   campaign.currentEra = 1;

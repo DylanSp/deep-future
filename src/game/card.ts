@@ -1,48 +1,39 @@
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
-import type { Immutable } from "immer";
 
-type CardCommonFields = Immutable<{
+type CardCommonFields = {
   suit: Suit;
   rank: Rank;
-}>;
+};
 
-export type WorldCard = Immutable<
-  CardCommonFields & {
-    kind: "world";
+export type WorldCard = CardCommonFields & {
+  kind: "world";
 
-    name: string;
-    sector: Sector;
-    era: Era;
-    // TODO -  advancements
-  }
->;
+  name: string;
+  sector: Sector;
+  era: Era;
+  // TODO -  advancements
+};
 
-type TechCard = Immutable<
-  CardCommonFields & {
-    kind: "tech";
+type TechCard = CardCommonFields & {
+  kind: "tech";
 
-    era: Era;
-    name?: string;
-    // TODO - suits, advancements
-  }
->;
+  era: Era;
+  name?: string;
+  // TODO - suits, advancements
+};
 
-type CivilizationCard = Immutable<
-  CardCommonFields & {
-    kind: "civ";
+type CivilizationCard = CardCommonFields & {
+  kind: "civ";
 
-    name: string;
-    sector: Sector;
-    era: Era;
-    homeworldName: string;
-    techs: Array<string>;
-  }
->;
+  name: string;
+  sector: Sector;
+  era: Era;
+  homeworldName: string;
+  techs: Array<string>;
+};
 
-type BlankCard = Immutable<
-  CardCommonFields & {
-    kind: "blank";
-  }
->;
+type BlankCard = CardCommonFields & {
+  kind: "blank";
+};
 
-export type Card = Immutable<WorldCard | TechCard | CivilizationCard | BlankCard>;
+export type Card = WorldCard | TechCard | CivilizationCard | BlankCard;

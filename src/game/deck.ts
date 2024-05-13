@@ -1,4 +1,4 @@
-import { original, produce } from "immer";
+import { produce } from "immer";
 import type { Card } from "./card";
 import type { Rank, Sector, Suit } from "./commonTypes";
 
@@ -7,68 +7,54 @@ export type Deck = {
   discardPile: Array<Card>; // 0th element = bottom of discard (shouldn't generally matter)
 };
 
-export function generateRandomSector(deck: Deck): [Deck, Sector] {
-  const [deck1, firstDigit] = getRandomRank(deck);
-  const [deck2, secondDigit] = getRandomRank(deck1);
+export function generateRandomSector(deck: Deck): Sector {
+  const firstDigit = generateRandomRank(deck);
+  const secondDigit = generateRandomRank(deck);
   const sector = `${firstDigit}${secondDigit}`;
-  return [deck2, sector];
+  return sector;
 }
 
-export function createBlankCard(deck: Deck): [Deck, Card] {
-  const [deck1, rank] = getRandomRank(deck);
-  const [deck2, suit] = getRandomSuit(deck1);
+export function createBlankCard(deck: Deck): Card {
+  const rank = generateRandomRank(deck);
+  const suit = generateRandomSuit(deck);
   const newCard: Card = {
     kind: "blank",
     rank,
     suit,
   };
-  return [deck2, newCard];
+  return newCard;
 }
 
-function getRandomRank(deck: Deck): [Deck, Rank] {
-  const [deckWithoutDraw, drawnCard] = drawCard(deck);
+function generateRandomRank(deck: Deck): Rank {
+  const drawnCard = drawCard(deck);
   const rank = drawnCard.rank;
-  const deckWithDiscard = discardCard(deckWithoutDraw, drawnCard);
-  return [deckWithDiscard, rank];
+  discardCard(deck, drawnCard);
+  return rank;
 }
 
-function getRandomSuit(deck: Deck): [Deck, Suit] {
-  const [deckWithoutDraw, drawnCard] = drawCard(deck);
+function generateRandomSuit(deck: Deck): Suit {
+  const drawnCard = drawCard(deck);
   const suit = drawnCard.suit;
-  const deckWithDiscard = discardCard(deckWithoutDraw, drawnCard);
-  return [deckWithDiscard, suit];
+  discardCard(deck, drawnCard);
+  return suit;
 }
 
 // assumes there's at least one card in either the draw pile or the discard pile
-function drawCard(deck: Deck): [Deck, Card] {
-  let drawnCard: Card;
+function drawCard(deck: Deck): Card {
+  if (deck.drawPile.length === 0) {
+    // shuffle discard pile to make new deck
+    deck.drawPile = shuffle(deck.discardPile);
+    deck.discardPile = [];
+  }
 
-  const newDeck = produce(deck, (draft) => {
-    if (original(draft.drawPile.length) === 0) {
-      // shuffle discard pile to make new deck
-      draft.drawPile = shuffle(original(draft.discardPile)!);
-      draft.discardPile = [];
-    }
-
-    drawnCard = draft.drawPile.pop()!; // non-null assertion needed because pop() can return undefined on an empty array
-  });
-
-  // @ts-expect-error - Supress error about drawnCard not being assigned; the produce() call will always run first
-  return [newDeck, drawnCard];
+  // non-null assertion needed because pop() can return undefined on an empty array,
+  // but we know from preconditions and shuffling discard pile in that drawPile won't be empty
+  const drawnCard = deck.drawPile.pop()!;
+  return drawnCard;
 }
 
-function discardCard(deck: Deck, card: Card): Deck {
-  const originals = {
-    deck,
-    card,
-  };
-
-  const result = produce(originals, (draft) => {
-    const { deck: draftDeck, card: draftCard } = draft;
-    draftDeck.discardPile.push(draftCard);
-  });
-
-  return result.deck;
+export function discardCard(deck: Deck, card: Card) {
+  deck.discardPile.push(card);
 }
 
 // Fisher-Yates shuffle
