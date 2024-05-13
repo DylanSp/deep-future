@@ -6,7 +6,7 @@ type CardCommonFields = Immutable<{
   rank: Rank;
 }>;
 
-type WorldCard = Immutable<
+export type WorldCard = Immutable<
   CardCommonFields & {
     kind: "world";
 

@@ -1,12 +1,18 @@
-import type { Immutable } from "immer";
 import { original, produce } from "immer";
 import type { Card } from "./card";
-import type { Rank, Suit } from "./commonTypes";
+import type { Rank, Sector, Suit } from "./commonTypes";
 
-type Deck = {
-  drawPile: Immutable<Array<Card>>; // 0th element = top of deck
-  discardPile: Immutable<Array<Card>>; // 0th element = bottom of discard (shouldn't generally matter)
+export type Deck = {
+  drawPile: Array<Card>; // 0th element = top of deck
+  discardPile: Array<Card>; // 0th element = bottom of discard (shouldn't generally matter)
 };
+
+export function generateRandomSector(deck: Deck): [Deck, Sector] {
+  const [deck1, firstDigit] = getRandomRank(deck);
+  const [deck2, secondDigit] = getRandomRank(deck1);
+  const sector = `${firstDigit}${secondDigit}`;
+  return [deck2, sector];
+}
 
 export function createBlankCard(deck: Deck): [Deck, Card] {
   const [deck1, rank] = getRandomRank(deck);
