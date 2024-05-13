@@ -1,7 +1,7 @@
 import type { Card, WorldCard } from "./card";
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
 import type { Deck } from "./deck";
-import { generateBlankCard, discardCard, generateRandomSector, shuffleDeck } from "./deck";
+import { generateBlankCard, discardCard, generateRandomSector, shuffleDeck, drawCard } from "./deck";
 import { newGame, type Game } from "./game";
 
 type WonderType = "territory" | "population" | "culture" | "might" | "stability" | "xeno";
@@ -71,7 +71,7 @@ export function newCampaign(): Campaign {
   };
 
   for (let i = 0; i < 12; i++) {
-    const blankHomeworld = generateBlankCard(deck);
+    const blankHomeworld = drawCard(deck);
     const homeworldSector = generateRandomSector(deck);
 
     const unnamedHomeworld: WorldCard = {
