@@ -1,8 +1,8 @@
 import type { Card, WorldCard } from "./card";
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
 import type { Deck } from "./deck";
-import { createBlankCard, discardCard, generateRandomSector, shuffleDeck } from "./deck";
-import type { Game } from "./game";
+import { generateBlankCard, discardCard, generateRandomSector, shuffleDeck } from "./deck";
+import { newGame, type Game } from "./game";
 
 type WonderType = "territory" | "population" | "culture" | "might" | "stability" | "xeno";
 
@@ -38,6 +38,7 @@ type CampaignWithoutGame = CampaignCommonFields & {
 
 export type Campaign = CampaignWithActiveGame | CampaignWithoutGame;
 
+// major entrypoint to game logic
 export function newCampaign(): Campaign {
   const deck: Deck = {
     drawPile: [],
@@ -70,7 +71,7 @@ export function newCampaign(): Campaign {
   };
 
   for (let i = 0; i < 12; i++) {
-    const blankHomeworld = createBlankCard(deck);
+    const blankHomeworld = generateBlankCard(deck);
     const homeworldSector = generateRandomSector(deck);
 
     const unnamedHomeworld: WorldCard = {
@@ -97,3 +98,18 @@ export function newCampaign(): Campaign {
 
   return campaign;
 }
+
+// major entrypoint to game logic
+export function startNewGame(campaign: CampaignWithoutGame): CampaignWithActiveGame {
+  const game = newGame(campaign.currentEra, campaign.deck);
+  const campaignWithGame: CampaignWithActiveGame = {
+    kind: "activeGame",
+
+    previousGames: campaign.previousGames,
+    wonders: campaign.wonders,
+    game,
+  };
+  return campaignWithGame;
+}
+
+// TODO - some sort of function for completing a game; add info to previousGames, possibly add wonder, possibly increment era

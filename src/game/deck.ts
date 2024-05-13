@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import type { Card } from "./card";
+import type { BlankCard, Card } from "./card";
 import type { Rank, Sector, Suit } from "./commonTypes";
 
 export type Deck = {
@@ -14,7 +14,7 @@ export function generateRandomSector(deck: Deck): Sector {
   return sector;
 }
 
-export function createBlankCard(deck: Deck): Card {
+export function generateBlankCard(deck: Deck): BlankCard {
   const rank = generateRandomRank(deck);
   const suit = generateRandomSuit(deck);
   const newCard: Card = {
@@ -40,7 +40,7 @@ function generateRandomSuit(deck: Deck): Suit {
 }
 
 // assumes there's at least one card in either the draw pile or the discard pile
-function drawCard(deck: Deck): Card {
+export function drawCard(deck: Deck): Card {
   if (deck.drawPile.length === 0) {
     // shuffle discard pile to make new deck
     shuffleDeck(deck);

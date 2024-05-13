@@ -14,7 +14,7 @@ export type WorldCard = CardCommonFields & {
   // TODO -  advancements
 };
 
-type TechCard = CardCommonFields & {
+export type TechCard = CardCommonFields & {
   kind: "tech";
 
   era: Era;
@@ -22,7 +22,7 @@ type TechCard = CardCommonFields & {
   // TODO - suits, advancements
 };
 
-type CivilizationCard = CardCommonFields & {
+export type CivilizationCard = CardCommonFields & {
   kind: "civ";
 
   name: string;
@@ -32,8 +32,24 @@ type CivilizationCard = CardCommonFields & {
   techs: Array<string>;
 };
 
-type BlankCard = CardCommonFields & {
+export type BlankCard = CardCommonFields & {
   kind: "blank";
 };
 
 export type Card = WorldCard | TechCard | CivilizationCard | BlankCard;
+
+export function createHomeworld(initialCard: BlankCard, name: string, sector: Sector, era: Era): WorldCard {
+  const homeworldCard: WorldCard = {
+    kind: "world",
+
+    name,
+    era,
+    sector,
+    suit: initialCard.suit,
+    rank: initialCard.rank,
+  };
+
+  // TODO - add a random starting advancement
+
+  return homeworldCard;
+}
