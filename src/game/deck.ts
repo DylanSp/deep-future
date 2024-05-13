@@ -43,8 +43,7 @@ function generateRandomSuit(deck: Deck): Suit {
 function drawCard(deck: Deck): Card {
   if (deck.drawPile.length === 0) {
     // shuffle discard pile to make new deck
-    deck.drawPile = shuffle(deck.discardPile);
-    deck.discardPile = [];
+    shuffleDeck(deck);
   }
 
   // non-null assertion needed because pop() can return undefined on an empty array,
@@ -55,6 +54,13 @@ function drawCard(deck: Deck): Card {
 
 export function discardCard(deck: Deck, card: Card) {
   deck.discardPile.push(card);
+}
+
+// shuffle draw pile and discard pile together
+export function shuffleDeck(deck: Deck) {
+  const shuffledDeck = shuffle(deck.drawPile.concat(...deck.discardPile));
+  deck.drawPile = shuffledDeck;
+  deck.discardPile = [];
 }
 
 // Fisher-Yates shuffle

@@ -1,7 +1,7 @@
 import type { Card, WorldCard } from "./card";
 import type { Era, Rank, Sector, Suit } from "./commonTypes";
 import type { Deck } from "./deck";
-import { createBlankCard, discardCard, generateRandomSector } from "./deck";
+import { createBlankCard, discardCard, generateRandomSector, shuffleDeck } from "./deck";
 import type { Game } from "./game";
 
 type WonderType = "territory" | "population" | "culture" | "might" | "stability" | "xeno";
@@ -89,6 +89,9 @@ export function newCampaign(): Campaign {
 
     discardCard(deck, unnamedHomeworld);
   }
+
+  // shuffle all initial homeworlds into the deck
+  shuffleDeck(deck);
 
   campaign.currentEra = 1;
 
